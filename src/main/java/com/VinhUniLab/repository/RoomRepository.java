@@ -1,4 +1,6 @@
 package com.VinhUniLab.repository;
 
-public class RoomRepository {
+import com.VinhUniLab.entity.Room;
+
+public interface RoomRepository extends BaseRepository<Room> {
 }

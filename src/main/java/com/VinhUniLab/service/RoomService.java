@@ -1,4 +1,6 @@
 package com.VinhUniLab.service;
 
-public class RoomService {
+import com.VinhUniLab.entity.Room;
+
+public interface RoomService extends BaseService<Room> {
 }
