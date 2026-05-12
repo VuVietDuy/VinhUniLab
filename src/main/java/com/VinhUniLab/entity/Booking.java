@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "bookings")
 @Data
 @NoArgsConstructor
-public class Booking {
+public class Booking extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

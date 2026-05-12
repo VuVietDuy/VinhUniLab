@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "incident_reports")
 @Data
 @NoArgsConstructor
-public class IncidentReport {
+public class IncidentReport extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
