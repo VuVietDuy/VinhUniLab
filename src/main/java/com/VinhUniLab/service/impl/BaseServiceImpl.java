@@ -7,6 +7,8 @@ import com.VinhUniLab.service.BaseAttributesService;
 import com.VinhUniLab.service.BaseService;
 import com.VinhUniLab.utils.ObjectMapperUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -58,6 +60,11 @@ public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseReposi
     @Override
     public List<E> save(List<E> es) {
         return this.repository.saveAll(es);
+    }
+
+    @Override
+    public Page<E> search(Pageable pageable) {
+        return this.repository.findAll(pageable);
     }
 
 }

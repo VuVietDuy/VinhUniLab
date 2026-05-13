@@ -4,6 +4,8 @@ import com.VinhUniLab.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +36,7 @@ public class Booking extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "booking_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private BookingStatus status = BookingStatus.PENDING;
 
     @Column(name = "created_at")

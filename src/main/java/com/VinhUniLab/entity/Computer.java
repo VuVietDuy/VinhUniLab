@@ -24,6 +24,9 @@ public class Computer extends BaseEntity {
     @JsonIgnore
     private Room room;
 
+    @Column(name = "room_id", insertable = false, updatable = false)
+    private Long roomId;
+
     @Column(name = "computer_code", nullable = false, length = 20)
     private String computerCode;
 

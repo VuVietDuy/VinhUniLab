@@ -1,16 +1,13 @@
 package com.VinhUniLab.controller;
 
 import com.VinhUniLab.entity.BaseEntity;
-import com.VinhUniLab.model.response.BaseResponse;
 import com.VinhUniLab.service.BaseService;
 import jakarta.validation.Valid;
-import org.aspectj.bridge.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 public abstract class BaseController<E extends BaseEntity, S extends BaseService<E>> {
 
@@ -45,6 +42,11 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(this.service.getAll());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(Pageable pageable) {
+        return ResponseEntity.ok(this.service.search(pageable));
     }
 
 }

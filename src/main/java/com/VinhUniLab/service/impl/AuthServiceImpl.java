@@ -1,10 +1,12 @@
 package com.VinhUniLab.service.impl;
 
+import com.VinhUniLab.config.CustomUserDetails;
 import com.VinhUniLab.entity.User;
 import com.VinhUniLab.model.request.LoginRequest;
 import com.VinhUniLab.model.response.LoginResponse;
 import com.VinhUniLab.repository.UserRepository;
 import com.VinhUniLab.service.AuthService;
+import com.VinhUniLab.service.JwtService;
 import com.VinhUniLab.utils.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +20,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider; // Class tự định nghĩa để tạo JWT
+    private final JwtService jwtService; // Class tự định nghĩa để tạo JWT
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
@@ -31,10 +34,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 3. Tạo Access Token
-        String token = tokenProvider.generateToken(user.getUsername(), user.getRole().name());
+//        String token = tokenProvider.generateToken(user.getUsername(), user.getRole().name());
+        var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
 
         return new LoginResponse(
-                token,
+                jwtToken,
                 "Bearer",
                 user.getUsername(),
                 user.getRole().name()

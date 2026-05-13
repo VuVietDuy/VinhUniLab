@@ -5,6 +5,8 @@ import com.VinhUniLab.enums.IncidentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +23,15 @@ public class IncidentReport extends BaseEntity {
     @JoinColumn(name = "computer_id")
     private Computer computer;
 
+    @Column(name = "computer_id", insertable = false, updatable = false)
+    private Long computerId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reported_by")
     private User reportedBy;
+
+    @Column(name = "reported_by", insertable = false, updatable = false)
+    private Long reportedById;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technician_id")
@@ -37,10 +45,12 @@ public class IncidentReport extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "incident_priority")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private IncidentPriority priority = IncidentPriority.NORMAL;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "incident_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private IncidentStatus status = IncidentStatus.OPEN;
 
     @Column(name = "created_at")
