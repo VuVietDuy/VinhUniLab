@@ -20,6 +20,17 @@ public class IncidentReportServiceImpl extends BaseServiceImpl<IncidentReport, I
     }
 
     @Override
+    public IncidentReport changeStatus(IncidentReport req) {
+        IncidentReport e = repository.findById(req.getId()).orElse(null);
+        if (Objects.isNull(e)) {
+            return null;
+        }
+
+        e.setStatus(req.getStatus());
+        return repository.save(e);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public IncidentReport create(IncidentReport t) {
         t.setReportedBy(Objects.requireNonNull(SecurityUtils.getCurrentUser()).getUser());

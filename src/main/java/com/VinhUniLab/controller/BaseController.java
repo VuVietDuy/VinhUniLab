@@ -1,10 +1,11 @@
 package com.VinhUniLab.controller;
 
 import com.VinhUniLab.entity.BaseEntity;
+import com.VinhUniLab.model.request.SearchReq;
 import com.VinhUniLab.service.BaseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +46,9 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(Pageable pageable) {
-        return ResponseEntity.ok(this.service.search(pageable));
+    public ResponseEntity<?> search(@Valid SearchReq req) {
+        Page<E> pageD = this.service.search(req);
+        return ResponseEntity.ok(pageD);
     }
 
 }
