@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -37,6 +38,9 @@ public class IncidentReportServiceImpl extends BaseServiceImpl<IncidentReport, I
         }
 
         e.setStatus(req.getStatus());
+        if (req.getStatus().equals(IncidentStatus.RESOLVED)) {
+            e.setResolvedAt(LocalDateTime.now());
+        }
         return repository.save(e);
     }
 

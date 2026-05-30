@@ -58,4 +58,13 @@ public class IncidentReport extends BaseEntity {
 
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
+
+    @PrePersist
+    public void prePersist()
+    {
+        if (this.createdAt == null)
+        {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }
