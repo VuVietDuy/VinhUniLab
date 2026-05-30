@@ -24,6 +24,7 @@ CREATE TABLE users
 CREATE TABLE rooms
 (
     id          SERIAL PRIMARY KEY,
+    room_code   VARCHAR(50) NOT NULL,
     room_name   VARCHAR(50) NOT NULL,
     location    VARCHAR(100),
     total_seats INT     DEFAULT 0 CHECK (total_seats >= 0),
@@ -72,16 +73,6 @@ CREATE TABLE incident_reports
     resolved_at   TIMESTAMPTZ
 );
 
--- 7. Bảng Nhật ký sử dụng (Dùng cho thống kê)
-CREATE TABLE usage_logs
-(
-    id          SERIAL PRIMARY KEY,
-    computer_id INT REFERENCES computers (id),
-    user_id     INT REFERENCES users (id),
-    login_time  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    logout_time TIMESTAMPTZ,
-    CONSTRAINT check_usage_time CHECK (logout_time IS NULL OR logout_time > login_time)
-);
 
 -- Tạo Index để tăng tốc độ truy vấn cho Dashboard và Báo cáo
 CREATE INDEX idx_computers_room_status ON computers (room_id, status);

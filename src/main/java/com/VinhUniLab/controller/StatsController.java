@@ -1,6 +1,7 @@
 package com.VinhUniLab.controller;
 
 import com.VinhUniLab.model.dto.AdminStatsDTO;
+import com.VinhUniLab.model.dto.TechnicianStatsDTO;
 import com.VinhUniLab.service.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,10 @@ public class StatsController {
     @GetMapping("/admin")
     public ResponseEntity<AdminStatsDTO> getStats() {
         return ResponseEntity.ok(statsService.getAdminOverview());
+    }
+
+    @GetMapping("/technician")
+    public ResponseEntity<TechnicianStatsDTO> getTechnicianStats() {
+        return ResponseEntity.ok(statsService.getTechnicianOverview());
     }
 }
