@@ -1,6 +1,9 @@
 package com.VinhUniLab.controller;
 
+import com.VinhUniLab.entity.Room;
+import com.VinhUniLab.entity.User;
 import com.VinhUniLab.model.dto.UserDTO;
+import com.VinhUniLab.service.RoomService;
 import com.VinhUniLab.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends BaseController<User, UserService> {
 
     private final UserService userService;
 

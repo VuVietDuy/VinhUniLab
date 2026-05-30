@@ -1,7 +1,9 @@
 package com.VinhUniLab.service.impl;
 
+import com.VinhUniLab.entity.Booking;
 import com.VinhUniLab.entity.User;
 import com.VinhUniLab.model.dto.UserDTO;
+import com.VinhUniLab.repository.BookingRepository;
 import com.VinhUniLab.repository.UserRepository;
 import com.VinhUniLab.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User, UserRepository> implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
