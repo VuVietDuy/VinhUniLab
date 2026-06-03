@@ -3,6 +3,7 @@ package com.VinhUniLab.service.impl;
 import com.VinhUniLab.entity.User;
 import com.VinhUniLab.enums.UserRole;
 import com.VinhUniLab.model.dto.AdminStatsDTO;
+import com.VinhUniLab.model.dto.TeacherStatsDTO;
 import com.VinhUniLab.model.dto.TechnicianStatsDTO;
 import com.VinhUniLab.repository.StatsRepository;
 import com.VinhUniLab.service.StatsService;
@@ -30,6 +31,36 @@ public class StatsServiceImpl implements StatsService {
 
         dto.setIncidentStatusData(statsRepository.getIncidentStatusStats());
         dto.setMonthlyUsageData(statsRepository.getMonthlyUsageStats());
+
+        return dto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TeacherStatsDTO getTeacherOverview() {
+        User currentUser = Objects.requireNonNull(SecurityUtils.getCurrentUser()).getUser();
+        if (currentUser.getRole() != UserRole.TEACHER) {
+            throw new RuntimeException("Nguoi dung hien tai khong phai giao vien");
+        }
+
+        Long teacherId = currentUser.getId();
+        TeacherStatsDTO dto = new TeacherStatsDTO();
+
+        dto.setTotalBookings(statsRepository.countBookingsByTeacher(teacherId));
+        dto.setPendingBookings(statsRepository.countBookingsByTeacherAndStatus(teacherId, "PENDING"));
+        dto.setApprovedBookings(statsRepository.countBookingsByTeacherAndStatus(teacherId, "APPROVED"));
+        dto.setRejectedBookings(statsRepository.countBookingsByTeacherAndStatus(teacherId, "REJECTED"));
+        dto.setCancelledBookings(statsRepository.countBookingsByTeacherAndStatus(teacherId, "CANCELLED"));
+        dto.setUpcomingBookings(statsRepository.countUpcomingBookingsByTeacher(teacherId));
+        dto.setReportedIncidents(statsRepository.countReportedIncidentsByTeacher(teacherId));
+        dto.setOpenIncidents(statsRepository.countReportedIncidentsByTeacherAndStatus(teacherId, "OPEN"));
+        dto.setInProgressIncidents(statsRepository.countReportedIncidentsByTeacherAndStatus(teacherId, "IN_PROGRESS"));
+        dto.setResolvedIncidents(statsRepository.countReportedIncidentsByTeacherAndStatus(teacherId, "RESOLVED"));
+        dto.setHighPriorityOpenIncidents(statsRepository.countHighPriorityOpenIncidentsByTeacher(teacherId));
+        dto.setBookingStatusData(statsRepository.getBookingStatusStatsByTeacher(teacherId));
+        dto.setIncidentStatusData(statsRepository.getIncidentStatusStatsByTeacher(teacherId));
+        dto.setUpcomingBookingData(statsRepository.getUpcomingBookingsByTeacher(teacherId));
+        dto.setRecentIncidentData(statsRepository.getRecentIncidentsByTeacher(teacherId));
 
         return dto;
     }

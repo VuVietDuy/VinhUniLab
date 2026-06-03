@@ -1,6 +1,7 @@
 package com.VinhUniLab.controller;
 
 import com.VinhUniLab.model.dto.AdminStatsDTO;
+import com.VinhUniLab.model.dto.TeacherStatsDTO;
 import com.VinhUniLab.model.dto.TechnicianStatsDTO;
 import com.VinhUniLab.service.StatsService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class StatsController {
     @GetMapping("/admin")
     public ResponseEntity<AdminStatsDTO> getStats() {
         return ResponseEntity.ok(statsService.getAdminOverview());
+    }
+
+    @GetMapping("/teacher")
+    public ResponseEntity<TeacherStatsDTO> getTeacherStats() {
+        return ResponseEntity.ok(statsService.getTeacherOverview());
     }
 
     @GetMapping("/technician")

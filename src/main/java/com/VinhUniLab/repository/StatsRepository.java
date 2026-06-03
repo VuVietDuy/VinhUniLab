@@ -35,6 +35,51 @@ public interface StatsRepository extends JpaRepository<User, Long> {
             "GROUP BY month ORDER BY month DESC LIMIT 6", nativeQuery = true)
     List<Map<String, Object>> getMonthlyUsageStats();
 
+    @Query(value = "SELECT COUNT(*) FROM bookings WHERE user_id = :teacherId", nativeQuery = true)
+    long countBookingsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT COUNT(*) FROM bookings WHERE user_id = :teacherId AND status = CAST(:status AS booking_status)", nativeQuery = true)
+    long countBookingsByTeacherAndStatus(@Param("teacherId") Long teacherId, @Param("status") String status);
+
+    @Query(value = "SELECT COUNT(*) FROM bookings " +
+            "WHERE user_id = :teacherId AND start_time >= CURRENT_TIMESTAMP AND status = 'APPROVED'", nativeQuery = true)
+    long countUpcomingBookingsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT COUNT(*) FROM incident_reports WHERE reported_by = :teacherId", nativeQuery = true)
+    long countReportedIncidentsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT COUNT(*) FROM incident_reports WHERE reported_by = :teacherId AND status = CAST(:status AS incident_status)", nativeQuery = true)
+    long countReportedIncidentsByTeacherAndStatus(@Param("teacherId") Long teacherId, @Param("status") String status);
+
+    @Query(value = "SELECT COUNT(*) FROM incident_reports " +
+            "WHERE reported_by = :teacherId AND priority = 'HIGH' AND status != 'RESOLVED'", nativeQuery = true)
+    long countHighPriorityOpenIncidentsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT status as type, COUNT(*) as value " +
+            "FROM bookings WHERE user_id = :teacherId GROUP BY status", nativeQuery = true)
+    List<Map<String, Object>> getBookingStatusStatsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT status as type, COUNT(*) as value " +
+            "FROM incident_reports WHERE reported_by = :teacherId GROUP BY status", nativeQuery = true)
+    List<Map<String, Object>> getIncidentStatusStatsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT b.id, b.start_time as startTime, b.end_time as endTime, b.purpose, b.status, " +
+            "r.room_name as roomName, r.location " +
+            "FROM bookings b " +
+            "LEFT JOIN rooms r ON b.room_id = r.id " +
+            "WHERE b.user_id = :teacherId AND b.start_time >= CURRENT_TIMESTAMP AND b.status = 'APPROVED' " +
+            "ORDER BY b.start_time ASC LIMIT 5", nativeQuery = true)
+    List<Map<String, Object>> getUpcomingBookingsByTeacher(@Param("teacherId") Long teacherId);
+
+    @Query(value = "SELECT ir.id, ir.description, ir.priority, ir.status, ir.created_at as createdAt, " +
+            "c.computer_code as computerCode, r.room_name as roomName " +
+            "FROM incident_reports ir " +
+            "LEFT JOIN computers c ON ir.computer_id = c.id " +
+            "LEFT JOIN rooms r ON c.room_id = r.id " +
+            "WHERE ir.reported_by = :teacherId " +
+            "ORDER BY ir.created_at DESC LIMIT 5", nativeQuery = true)
+    List<Map<String, Object>> getRecentIncidentsByTeacher(@Param("teacherId") Long teacherId);
+
     @Query(value = "SELECT COUNT(*) FROM incident_reports WHERE technician_id = :technicianId", nativeQuery = true)
     long countAssignedIncidentsByTechnician(@Param("technicianId") Long technicianId);
 
