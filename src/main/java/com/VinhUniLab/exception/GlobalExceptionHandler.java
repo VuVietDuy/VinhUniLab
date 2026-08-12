@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(false, "Loi he thong", HttpStatus.INTERNAL_SERVER_ERROR.value()));
+                .body(new ErrorResponse(false, ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
     private HttpStatus resolveStatus(Integer code) {
