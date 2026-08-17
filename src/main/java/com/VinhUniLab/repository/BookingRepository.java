@@ -29,6 +29,20 @@ public interface BookingRepository extends BaseRepository<Booking> {
     default boolean existsOverlappingBooking(Long roomId, LocalDateTime startTime, LocalDateTime endTime) {
         return existsOverlappingBooking(roomId, startTime, endTime, List.of(BookingStatus.APPROVED, BookingStatus.PENDING));
     }
+
+    @Query("SELECT b FROM Booking b WHERE b.room.id = :roomId " +
+           "AND b.status IN :statuses " +
+           "AND b.startTime < :dayEnd AND b.endTime > :dayStart")
+    List<Booking> findActiveBookingsByRoomAndDateRange(
+            @Param("roomId") Long roomId,
+            @Param("dayStart") LocalDateTime dayStart,
+            @Param("dayEnd") LocalDateTime dayEnd,
+            @Param("statuses") List<BookingStatus> statuses
+    );
+
+    default List<Booking> findActiveBookingsByRoomAndDateRange(Long roomId, LocalDateTime dayStart, LocalDateTime dayEnd) {
+        return findActiveBookingsByRoomAndDateRange(roomId, dayStart, dayEnd, List.of(BookingStatus.APPROVED, BookingStatus.PENDING));
+    }
 }
 
 

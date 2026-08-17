@@ -4,9 +4,38 @@
 -- 1. Định nghĩa các kiểu dữ liệu ENUM để quản lý trạng thái
 CREATE TYPE user_role AS ENUM ('ADMIN', 'TEACHER', 'TECHNICIAN');
 CREATE TYPE computer_status AS ENUM ('AVAILABLE', 'IN_USE', 'FAULTY', 'MAINTENANCE');
-CREATE TYPE booking_status AS ENUM ('PENDING', 'APPROVED', 'CANCELLED', 'REJECTED');
+CREATE TYPE booking_status AS ENUM ('PENDING', 'APPROVED', 'CANCELLED', 'REJECTED', 'RETURNED');
 CREATE TYPE incident_status AS ENUM ('OPEN', 'IN_PROGRESS', 'RESOLVED');
 CREATE TYPE incident_priority AS ENUM ('LOW', 'NORMAL', 'HIGH');
+
+DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_type
+            WHERE typname = 'booking_status'
+        ) THEN
+            CREATE TYPE booking_status AS ENUM (
+                'PENDING',
+                'APPROVED',
+                'CANCELLED',
+                'REJECTED',
+                'RETURNED'
+                );
+        END IF;
+    END
+$$;
+
+ALTER TYPE booking_status
+    ADD VALUE IF NOT EXISTS 'RETURNED';
+
+SELECT e.enumlabel
+FROM pg_enum e
+         JOIN pg_type t ON t.oid = e.enumtypid
+WHERE t.typname = 'booking_status'
+ORDER BY e.enumsortorder;
+
+select * from public.bookings;
 
 -- 2. Bảng Người dùng
 CREATE TABLE users
