@@ -4,6 +4,9 @@ import com.VinhUniLab.entity.BaseEntity;
 import com.VinhUniLab.model.request.SearchReq;
 import com.VinhUniLab.service.BaseService;
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,12 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
     public ResponseEntity<?> create(@Valid @RequestBody E dto) {
         dto = this.service.create(dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/saveAll")
+    public ResponseEntity<?> saveAll(@Valid @RequestBody List<E> listDto) {
+        List<E> dtoList = this.service.save(listDto);
+        return ResponseEntity.ok(dtoList);
     }
 
     @DeleteMapping("/delete")

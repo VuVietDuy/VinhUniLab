@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                 .stream()
                 .findFirst()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .orElse("Du lieu khong hop le");
+                .orElse("Dữ liệu không hợp lệ");
 
         return ResponseEntity
                 .badRequest()
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return ResponseEntity
                 .badRequest()
-                .body(new ErrorResponse(false, "Du lieu bi trung hoac khong hop le", HttpStatus.BAD_REQUEST.value()));
+                .body(new ErrorResponse(false, "Dữ liệu bị trùng hoặc không hợp lệ", HttpStatus.BAD_REQUEST.value()));
     }
 
     @ExceptionHandler(Exception.class)
